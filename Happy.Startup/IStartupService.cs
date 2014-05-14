@@ -19,7 +19,14 @@ namespace Happy.Startup
         IStartupService Include(Predicate<Assembly> filter);
 
         /// <summary>
-        /// 添加<see cref="IStartupPlugin"/>，可以使用多个<see cref="IStartupPlugin"/>，必须
+        /// 注册<see cref="IAssemblyLoader"/>，可以使用多个<see cref="IAssemblyLoader"/>，必须
+        /// 在启动前调用此方法。
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        IStartupService RegisterLoader(IAssemblyLoader loader);
+
+        /// <summary>
+        /// 注册<see cref="IStartupPlugin"/>，可以使用多个<see cref="IStartupPlugin"/>，必须
         /// 在启动前调用此方法。
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>

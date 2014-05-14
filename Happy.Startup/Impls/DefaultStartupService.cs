@@ -13,6 +13,7 @@ namespace Happy.Startup.Impls
     {
         private bool _isStarted = false;
         private readonly List<Predicate<Assembly>> _filters = new List<Predicate<Assembly>>();
+        private readonly List<IAssemblyLoader> _loaders = new List<IAssemblyLoader>();
         private readonly List<IStartupPlugin> _plugins = new List<IStartupPlugin>();
 
         public IStartupService Include(Predicate<Assembly> filter)
@@ -21,6 +22,14 @@ namespace Happy.Startup.Impls
             this.MustNotStarted();
 
             _filters.Add(filter);
+
+            return this;
+        }
+
+        public IStartupService RegisterLoader(IAssemblyLoader loader)
+        {
+            Check.MustNotNull(loader, "loader");
+            _loaders.Add(loader);
 
             return this;
         }
@@ -40,6 +49,8 @@ namespace Happy.Startup.Impls
             this.MustNotStarted();
 
             var assemblies = this.GetParticipateInStartupAssemblies();
+
+            _loaders.ForEach(x => x.Load());
 
             foreach (var assembly in assemblies)
             {
