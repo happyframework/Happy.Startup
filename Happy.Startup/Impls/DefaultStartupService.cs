@@ -48,18 +48,14 @@ namespace Happy.Startup.Impls
         {
             this.MustNotStarted();
 
-            var assemblies = this.GetParticipateInStartupAssemblies();
-
             _loaders.ForEach(x => x.Load());
 
-            foreach (var assembly in assemblies)
-            {
-                this.ExecutePlugs(assembly);
-            }
+            var assemblies = this.GetParticipateInStartupAssemblies();
 
-            foreach (var assembly in assemblies)
+            var context = new StartupContext(assemblies);
+            foreach (var plug in _plugins)
             {
-                this.ExecuteListeners(assembly);
+                plug.OnStarting(context);
             }
         }
 
@@ -73,24 +69,6 @@ namespace Happy.Startup.Impls
         {
             return assembly.IsDefined(typeof(ParticipateInStartupAttribute), false)
                    || _filters.Any(f => f(assembly));
-        }
-
-        private void ExecutePlugs(Assembly assembly)
-        {
-            foreach (var plug in _plugins)
-            {
-                plug.OnStarting(assembly);
-            }
-        }
-
-        private void ExecuteListeners(Assembly assembly)
-        {
-            var listeners = assembly.CreateConcreteDescendentInstances<IStartupListener>();
-
-            foreach (var listener in listeners)
-            {
-                listener.OnStarted();
-            }
         }
 
         private void MustNotStarted()

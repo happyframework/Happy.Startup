@@ -14,8 +14,8 @@ namespace Happy.Startup
     public interface IStartupPlugin
     {
         /// <summary>
-        /// 当加载<paramref name="assembly"/>时，插件的处理逻辑。
+        /// 当启动时，插件的处理逻辑。
         /// </summary>
-        void OnStarting(Assembly assembly);
+        void OnStarting(StartupContext context);
     }
 }

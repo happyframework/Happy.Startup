@@ -48,8 +48,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="StartupContext.cs" />
     <Compile Include="StartupService.cs" />
-    <Compile Include="IStartupListener.cs" />
     <Compile Include="IStartupPlugin.cs" />
     <Compile Include="IStartupPluginExtentions.cs" />
     <Compile Include="IStartupService.cs" />
