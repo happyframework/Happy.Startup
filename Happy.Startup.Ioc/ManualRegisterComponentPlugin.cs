@@ -9,16 +9,16 @@ using Happy.Ioc;
 namespace Happy.Startup.Ioc
 {
     /// <summary>
-    /// 自动将组件注册到Ioc容器中。
+    /// 手工将组件注册到Ioc容器中。
     /// </summary>
-    public sealed class AutoRegisterComponentPlugin : IStartupPlugin
+    public sealed class ManualRegisterComponentPlugin : IStartupPlugin
     {
         private readonly IComponentRegistry _componentRegistry;
 
         /// <summary>
         /// 构造方法。
         /// </summary>
-        public AutoRegisterComponentPlugin(IComponentRegistry componentRegistry)
+        public ManualRegisterComponentPlugin(IComponentRegistry componentRegistry)
         {
             Check.MustNotNull(componentRegistry, "componentRegistry");
 
@@ -28,7 +28,7 @@ namespace Happy.Startup.Ioc
         // <inheritdoc />
         public void OnStarting(StartupContext context)
         {
-            _componentRegistry.AutoRegister(context.Assemblies);
+            _componentRegistry.ManualRegister(context.Assemblies);
         }
     }
 }
