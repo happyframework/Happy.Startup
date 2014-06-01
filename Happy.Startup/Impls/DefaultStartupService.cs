@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
+using Microsoft.Practices.ServiceLocation;
+
 using Happy.Utils.Reflection;
 
 namespace Happy.Startup.Impls
@@ -62,19 +64,38 @@ namespace Happy.Startup.Impls
             _loaders.ForEach(x => x.Load());
 
             var assemblies = this.GetParticipateInStartupAssemblies();
+            this.ExecutePlugs(assemblies);
+            this.ExecuteProcessors(assemblies);
 
+            this.ExecuteIniters();
+        }
+
+        private void ExecutePlugs(List<Assembly> assemblies)
+        {
             var context = new StartupContext(assemblies);
             foreach (var plug in _plugins)
             {
                 plug.OnStarting(context);
             }
+        }
 
+        private void ExecuteProcessors(List<Assembly> assemblies)
+        {
             foreach (var type in assemblies.SelectMany(x => x.GetTypes()))
             {
                 foreach (var processor in _processors)
                 {
                     processor.Process(type);
                 }
+            }
+        }
+
+        private void ExecuteIniters()
+        {
+            var initers = ServiceLocator.Current.GetAllInstances<ISystemIniter>();
+            foreach (var initer in initers)
+            {
+                initer.Init();
             }
         }
 
