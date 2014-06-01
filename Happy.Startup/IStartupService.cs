@@ -33,6 +33,13 @@ namespace Happy.Startup
         IStartupService RegisterPlugin(IStartupPlugin plugin);
 
         /// <summary>
+        /// 注册<see cref="ITypeProcessor"/>，可以使用多个<see cref="ITypeProcessor"/>，必须
+        /// 在启动前调用此方法。
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        IStartupService RegisterProcessor(ITypeProcessor processor);
+
+        /// <summary>
         /// 启动。
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>

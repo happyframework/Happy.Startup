@@ -15,6 +15,7 @@ namespace Happy.Startup.Impls
         private readonly List<Predicate<Assembly>> _filters = new List<Predicate<Assembly>>();
         private readonly List<IAssemblyLoader> _loaders = new List<IAssemblyLoader>();
         private readonly List<IStartupPlugin> _plugins = new List<IStartupPlugin>();
+        private readonly List<ITypeProcessor> _processors = new List<ITypeProcessor>();
 
         public IStartupService Include(Predicate<Assembly> filter)
         {
@@ -44,6 +45,16 @@ namespace Happy.Startup.Impls
             return this;
         }
 
+        public IStartupService RegisterProcessor(ITypeProcessor processor)
+        {
+            Check.MustNotNull(processor, "processor");
+            this.MustNotStarted();
+
+            _processors.Add(processor);
+
+            return this;
+        }
+
         public void Start()
         {
             this.MustNotStarted();
@@ -56,6 +67,14 @@ namespace Happy.Startup.Impls
             foreach (var plug in _plugins)
             {
                 plug.OnStarting(context);
+            }
+
+            foreach (var type in assemblies.SelectMany(x => x.GetTypes()))
+            {
+                foreach (var processor in _processors)
+                {
+                    processor.Process(type);
+                }
             }
         }
 

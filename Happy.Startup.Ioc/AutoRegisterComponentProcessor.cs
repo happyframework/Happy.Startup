@@ -11,14 +11,14 @@ namespace Happy.Startup.Ioc
     /// <summary>
     /// 自动将组件注册到Ioc容器中。
     /// </summary>
-    public sealed class AutoRegisterComponentPlugin : IStartupPlugin
+    public sealed class AutoRegisterComponentProcessor : ITypeProcessor
     {
         private readonly IComponentRegistry _componentRegistry;
 
         /// <summary>
         /// 构造方法。
         /// </summary>
-        public AutoRegisterComponentPlugin(IComponentRegistry componentRegistry)
+        public AutoRegisterComponentProcessor(IComponentRegistry componentRegistry)
         {
             Check.MustNotNull(componentRegistry, "componentRegistry");
 
@@ -26,9 +26,9 @@ namespace Happy.Startup.Ioc
         }
 
         // <inheritdoc />
-        public void OnStarting(StartupContext context)
+        public void Process(Type type)
         {
-            _componentRegistry.AutoRegister(context.Assemblies);
+            _componentRegistry.AutoRegister(type);
         }
     }
 }

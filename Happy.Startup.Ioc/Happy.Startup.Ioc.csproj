@@ -45,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ManualRegisterComponentPlugin.cs" />
-    <Compile Include="AutoRegisterComponentPlugin.cs" />
+    <Compile Include="ManualRegisterComponentProcessor.cs" />
+    <Compile Include="AutoRegisterComponentProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
